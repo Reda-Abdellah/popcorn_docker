@@ -15,11 +15,11 @@ RUN mkdir /tmp/test_image
 #RUN wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=1NSZilDWXLcHAHP0FyGs945hjj62ypvWy' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1NSZilDWXLcHAHP0FyGs945hjj62ypvWy" -O 2times_in_iqda_v2.zip && rm -rf /tmp/cookies.txt
 #RUN unzip 2times_in_iqda_v2.zip
 RUN git clone https://github.com/Reda-Abdellah/popcorn_docker.git
-RUN cp -avr popcorn_docker_public/Anima-Scripts-Public /anima/Anima-Scripts-Public
-RUN cp popcorn_docker_public/config.txt /root/.anima
-RUN cp popcorn_docker_public/POPCORN_cocktail/* /anima/WEIGHTS
-RUN cp popcorn_docker_public/*.py /anima/
-RUN cp popcorn_docker_public/Registration /anima/Registration
+RUN cp -avr popcorn_docker/Anima-Scripts-Public /anima/Anima-Scripts-Public
+RUN cp popcorn_docker/config.txt /root/.anima
+RUN cp popcorn_docker/POPCORN_cocktail/* /anima/WEIGHTS
+RUN cp popcorn_docker/*.py /anima/
+RUN cp -avr popcorn_docker/Registration /anima/Registration
 #COPY *.py  /anima/
 #COPY *.png  /anima/
 #COPY Registration /anima/Registration
