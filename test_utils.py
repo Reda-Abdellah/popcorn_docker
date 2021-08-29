@@ -185,7 +185,7 @@ def get_lesions_keras(pred_name,flair1_name,brain_mask_name):
     gc.collect() #free memory
 
 def get_lesions(pred_name,flair1_name,brain_mask_name):
-    WEIGHTS= sorted(glob.glob("/anima/WEIGHTS/*"))
+    WEIGHTS= sorted(glob.glob("/Weights/*"))
     #WEIGHTS= sorted(glob.glob("/mnt/4TB/POPCORN_docker/for_train/Weights/POPCORN_cocktail/*"))
     FLAIR_1 =load_time(flair1_name, brain_mask_name)
 

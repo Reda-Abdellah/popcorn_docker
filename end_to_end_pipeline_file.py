@@ -32,7 +32,7 @@ if('.gz' in args.flair):
     os.system('gunzip '+flair_name+'.gz')
 else:
     shutil.copyfile(args.flair, flair_name)
-cmd= "python /anima/Anima-Scripts-Public/ms_lesion_segmentation/animaMSLongitudinalPreprocessing.py -i /data/patients/ -o /data/patients_preprocessed/"
+cmd= "python /opt/popcorn/Anima-Scripts-Public/ms_lesion_segmentation/animaMSLongitudinalPreprocessing.py -i /data/patients/ -o /data/patients_preprocessed/"
 os.system(cmd)
 
 affine_flair_intoMNI = ToMNI_ANTS_ref( preprocessed_flair_name)

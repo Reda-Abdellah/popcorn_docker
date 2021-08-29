@@ -34,6 +34,7 @@ RUN apt -qqy install wget
 
 RUN wget -q https://github.com/Inria-Visages/Anima-Public/releases/download/v4.0.1/Anima-Ubuntu-4.0.1.zip
 RUN unzip Anima-Ubuntu-4.0.1.zip
+RUN apt -qqy install git git-lfs
 RUN git lfs install
 RUN git clone --depth 1 https://github.com/Inria-Visages/Anima-Scripts-Data-Public.git
 RUN mkdir /root/.anima/
@@ -50,15 +51,15 @@ RUN wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=down
 RUN unzip vol_trained_all.zip
 RUN mv *.pt /Weights/
 
-RUN apt -qqy install git
+
 RUN chmod 777 -R /opt/popcorn/*
 
-RUN mv DLB_docker/* /opt/popcorn
+
 RUN mkdir /data/
 RUN mkdir -p /data/patients/patient_X/
 
 RUN git clone https://github.com/Reda-Abdellah/popcorn_docker.git
-RUN cp -avr popcorn_docker/Anima-Scripts-Public /anima/Anima-Scripts-Public
+RUN cp -avr popcorn_docker/Anima-Scripts-Public /opt/popcorn/Anima-Scripts-Public
 RUN cp popcorn_docker/config.txt /root/.anima
 RUN cp popcorn_docker/*.py /opt/popcorn/
 RUN cp -avr popcorn_docker/Registration /opt/popcorn/Registration
