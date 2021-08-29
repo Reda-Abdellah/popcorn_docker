@@ -8,8 +8,11 @@ import statsmodels.api as sm
 from scipy.signal import argrelextrema
 from keras import optimizers
 import modelos
+import torch
+import torch.nn as nn
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def seg_majvote(FLAIR,model,WEIGHTS,ps=[64,64,64],
+def seg_majvote_keras(FLAIR,model,WEIGHTS,ps=[64,64,64],
         offset1=32,offset2=32,offset3=32,crop_bg=0):
     MASK = (1-(FLAIR==0).astype('int'))
     ind=np.where(MASK>0)
@@ -42,6 +45,50 @@ def seg_majvote(FLAIR,model,WEIGHTS,ps=[64,64,64],
 
                     T = np.reshape(   FLAIR[x:xx,y:yy,z:zz] , (1,ps[0],ps[1],ps[2], 1))
                     patches=model.predict(T)
+                    #store result
+                    local_patch = np.reshape(patches,(patches.shape[1],patches.shape[2],patches.shape[3],patches.shape[4]))
+                    output[x:xx,y:yy,z:zz,:]=output[x:xx,y:yy,z:zz,:]+local_patch[0:xx-x,0:yy-y,0:zz-z]
+                    ii=ii+1
+
+    SEG= np.argmax(output, axis=3)
+    SEG_mask= np.reshape(SEG, SEG.shape[0:3])
+    return SEG_mask
+
+def seg_majvote(FLAIR,WEIGHTS,ps=[64,64,64],
+        offset1=32,offset2=32,offset3=32,crop_bg=0):
+    MASK = (1-(FLAIR==0).astype('int'))
+    ind=np.where(MASK>0)
+    indbg=np.where(MASK==0)
+
+    out_shape=(FLAIR.shape[0],FLAIR.shape[1],FLAIR.shape[2],2)
+    output=np.zeros(out_shape,FLAIR.dtype)
+    acu=np.zeros(out_shape[0:3],FLAIR.dtype)
+
+
+    ii=0 # Network ID
+    for model_name in WEIGHTS:
+        model= torch.load(model_name)
+        for x in range(crop_bg,  FLAIR.shape[0] ,offset1):
+            xx = x+ps[0]
+            if xx> output.shape[0]:
+                xx = output.shape[0]
+                x=xx-ps[0]
+            for y in range(crop_bg,  FLAIR.shape[1] ,offset2):
+                yy = y+ps[1]
+                if yy> output.shape[1]:
+                    yy = output.shape[1]
+                    y=yy-ps[1]
+                for z in range(crop_bg,  FLAIR.shape[2] ,offset3):
+                    zz = z+ps[2]
+                    if zz> output.shape[2]:
+                        zz = output.shape[2]
+                        z=zz-ps[2]
+
+                    T = np.reshape(   FLAIR[x:xx,y:yy,z:zz] , (1,ps[0],ps[1],ps[2], 1))
+                    T=torch.from_numpy(T.transpose((0,4,1,2,3))).to(device)
+                    patches = model(T)
+                    patches= patches.cpu().numpy()
+                    patches= patches.transpose((0,2,3,4,1))
                     #store result
                     local_patch = np.reshape(patches,(patches.shape[1],patches.shape[2],patches.shape[3],patches.shape[4]))
                     output[x:xx,y:yy,z:zz,:]=output[x:xx,y:yy,z:zz,:]+local_patch[0:xx-x,0:yy-y,0:zz-z]
@@ -126,9 +173,8 @@ def normalize_image(vol, contrast):
 
     return peak
 
-def get_lesions(pred_name,flair1_name,brain_mask_name):
+def get_lesions_keras(pred_name,flair1_name,brain_mask_name):
     WEIGHTS= sorted(glob.glob("/anima/WEIGHTS/*"))
-    #WEIGHTS= sorted(glob.glob("/mnt/4TB/POPCORN_docker/for_train/Weights/POPCORN_cocktail/*"))
     FLAIR_1 =load_time(flair1_name, brain_mask_name)
     model=modelos.load_UNET3D_SLANT27_v2_groupNorm(64,64,64,1,2,24,0)
 
@@ -138,4 +184,14 @@ def get_lesions(pred_name,flair1_name,brain_mask_name):
     img.to_filename(pred_name)
     gc.collect() #free memory
 
+def get_lesions(pred_name,flair1_name,brain_mask_name):
+    WEIGHTS= sorted(glob.glob("/anima/WEIGHTS/*"))
+    #WEIGHTS= sorted(glob.glob("/mnt/4TB/POPCORN_docker/for_train/Weights/POPCORN_cocktail/*"))
+    FLAIR_1 =load_time(flair1_name, brain_mask_name)
+
+    SEG_mask=seg_majvote(FLAIR_1,WEIGHTS,ps=[64,64,64],
+                        offset1=32,offset2=32,offset3=32,crop_bg=0)
+    img = nii.Nifti1Image(SEG_mask.astype(np.uint8), nii.load(flair1_name).affine )
+    img.to_filename(pred_name)
+    gc.collect() #free memory
 #get_lesions('seg.nii.gz','yamato_training_01_01_flair.nii.gz',brain_mask_name=None)

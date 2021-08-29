@@ -1,0 +1,10 @@
+{
+
+                "CUDA_VISIBLE_DEVICES": "0",
+                "in_folder_path":"/dataset/",
+                "T1_keyword":"mprage",
+                "FLAIR_keyword":"flair",
+                "to_segment_folder":"/dataset/to_segment/",
+                "training_name":"TRAINING1"
+
+}
