@@ -5,7 +5,7 @@ from report_utils import *
 from make_reports import *
 from utils import *
 import argparse
-from Registration2.registration import ToMNI_ANTS_ref, FLAIR_to_MNI, MASK_to_MNI, to_native
+from Registration.registration import ToMNI_ANTS_ref, FLAIR_to_MNI, MASK_to_MNI, to_native
 
 
 parser = argparse.ArgumentParser(

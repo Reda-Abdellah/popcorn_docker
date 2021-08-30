@@ -58,10 +58,10 @@ RUN chmod 777 -R /opt/popcorn/*
 RUN mkdir /data/
 RUN mkdir -p /data/patients/patient_X/
 
-RUN echo howdiiii
+RUN echo howdiiiii
 RUN git clone https://github.com/Reda-Abdellah/popcorn_docker.git
 RUN cp -avr popcorn_docker/Anima-Scripts-Public /opt/popcorn/Anima-Scripts-Public
 RUN cp popcorn_docker/config.txt /root/.anima
 RUN cp popcorn_docker/*.py /opt/popcorn/
-RUN cp -avr popcorn_docker/Registration /opt/popcorn/Registration2
+RUN cp -avr popcorn_docker/Registration/* /opt/popcorn/Registration/
 
