@@ -25,10 +25,10 @@ def TTDO(X1,model):
 	result = np.asarray(f([X1,1])[0])
 	return result
 
-def get_syntetic_t1(flair_name, mask_name, t1_name):
+def get_syntetic_t1(flair_name, brain_mask_name, t1_name):
 	#load model
 	nf=40
-	FLAIR=load_time(flair1_name, brain_mask_name)
+	FLAIR=load_time(flair_name, brain_mask_name)
 	FLAIR=np.pad(FLAIR,((0,1),(0,1),(0,1)),mode='symmetric')
 	FLAIR = Subimage_extraction(FLAIR)
 	ps1=np.floor(FLAIR.shape[1])
