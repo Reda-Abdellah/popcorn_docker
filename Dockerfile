@@ -59,10 +59,10 @@ RUN mkdir /data/
 RUN mkdir -p /data/patients/patient_X/
 
 RUN pip install torch
-RUN echo howdiiiiiiiii
+RUN echo howdiiiiiiiiii
 RUN git clone https://github.com/Reda-Abdellah/popcorn_docker.git
 RUN cp -avr popcorn_docker/Anima-Scripts-Public /opt/popcorn/Anima-Scripts-Public
 RUN cp popcorn_docker/config.txt /root/.anima
-RUN cp popcorn_docker/*.py /opt/popcorn/
+RUN cp popcorn_docker/*.* /opt/popcorn/
 RUN cp -avr popcorn_docker/Registration/* /opt/popcorn/Registration/
 

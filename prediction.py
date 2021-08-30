@@ -67,16 +67,12 @@ def get_syntetic_t1(flair_name, brain_mask_name, t1_name):
 	filepath="best_model_supervised_FLAIR_to_T1.h5"
 	model=modelos.load_UNET3D_Sintesis_v2(ps1,ps2,ps3,ch,nf)
 	model.load_weights(filepath)
-	FLAIR = np.reshape(FLAIR, (1,FLAIR.shape[0],FLAIR.shape[1],FLAIR.shape[2], 8))
-
 	t1=time.time()
 	res = TTDO(FLAIR,model)
 	t2=time.time()
 	print("tiempo=",t2-t1)
 	res=res[0,0:181,0:217,0:181,0]
 	nii.Nifti1Image(res,nii.load(flair_name).affine ).to_filename(t1_name)
-
-
 	return t1_name
 
 def normalize_image(vol, contrast):
