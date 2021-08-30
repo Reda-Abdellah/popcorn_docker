@@ -19,6 +19,35 @@ from scipy.stats import pearsonr
 from utils import *
 from test_utils import *
 
+def Subimage_extraction(input,factor=2,norm=0):
+	n=0
+	for x in range(0,factor):
+		for y in range(0,factor):
+			for z in range(0,factor):
+				temp=input[x::factor,y::factor,z::factor]
+				temp=np.reshape(temp,(1,temp.shape[0],temp.shape[1],temp.shape[2],1))
+				if(norm>0):
+					m=temp.mean()
+					s=temp.std()
+					temp=(temp-m)/s
+				if(n==0):
+					output=temp
+				else:
+					output=np.concatenate((output,temp), axis=-1)
+				n=n+1
+	return output
+
+def Subimage_reconstruction(input,size,factor=2):
+	output=np.zeros(size)
+	n=0
+	for x in range(0,factor):
+		for y in range(0,factor):
+			for z in range(0,factor):
+				output[x::factor,y::factor,z::factor]=input[:,:,:,n]
+				n=n+1
+	return output
+
+
 def TTDO(X1,model):
 	#test time dropout
 	f = K.function([model.layers[0].input, K.learning_phase()],[model.layers[-1].output])
