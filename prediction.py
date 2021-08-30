@@ -65,7 +65,7 @@ def get_syntetic_t1(flair_name, brain_mask_name, t1_name):
 	ps3=np.floor(FLAIR.shape[3])
 	ch =FLAIR.shape[4]
 	filepath="best_model_supervised_FLAIR_to_T1.h5"
-	model=load_UNET3D_Sintesis_v2(ps1,ps2,ps3,ch,nf)
+	model=modelos.load_UNET3D_Sintesis_v2(ps1,ps2,ps3,ch,nf)
 	model.load_weights(filepath)
 	FLAIR = np.reshape(FLAIR, (1,FLAIR.shape[0],FLAIR.shape[1],FLAIR.shape[2], 8))
 
