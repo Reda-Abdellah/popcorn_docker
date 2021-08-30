@@ -6,6 +6,6 @@
 # Use full paths, nothing relative or using tildes
 
 [anima-scripts]
-anima = /anima/Anima-Binaries-4.0.1/
-anima-scripts-public-root = /anima/Anima-Scripts-Public/
-extra-data-root = /anima/Anima-Scripts-Data-Public/
+anima = /opt/popcorn/Anima-Binaries-4.0.1/
+anima-scripts-public-root = /opt/popcorn/Anima-Scripts-Public/
+extra-data-root = /opt/popcorn/Anima-Scripts-Data-Public/
