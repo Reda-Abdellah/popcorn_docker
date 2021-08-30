@@ -17,6 +17,7 @@ from collections import OrderedDict, defaultdict
 from skimage import measure
 from scipy.stats import pearsonr
 from utils import *
+from test_utils import *
 
 def TTDO(X1,model):
 	#test time dropout
